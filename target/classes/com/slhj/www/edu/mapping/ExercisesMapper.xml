@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slhj.www.edu.dao.ExercisesMapper" >
+  <resultMap id="BaseResultMap" type="com.slhj.www.edu.pojo.Exercises" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="question_id" property="questionId" jdbcType="VARCHAR" />
+    <result column="question" property="question" jdbcType="VARCHAR" />
+    <result column="selection_a" property="selectionA" jdbcType="VARCHAR" />
+    <result column="selection_b" property="selectionB" jdbcType="VARCHAR" />
+    <result column="selection_c" property="selectionC" jdbcType="VARCHAR" />
+    <result column="selection_d" property="selectionD" jdbcType="VARCHAR" />
+    <result column="correct_answer" property="correctAnswer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, question_id, question, selection_a, selection_b, selection_c, selection_d, correct_answer
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from exercises
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByQuestionId" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    <include refid="Base_Column_List" />
+    from exercises
+    where question_id = #{questionId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 分页查询获取题目   -->
+	<select id="selectExercisesByPage" parameterType="com.slhj.www.edu.common.QueryBase"
+		resultMap="BaseResultMap">
+		select 
+    	<include refid="Base_Column_List" />
+    	from exercises
+		order by question_id
+		<if test="firstRow != null and pageSize != null">
+		limit #{firstRow},#{pageSize}
+		</if>
+	</select>
+  
+  <select id="size" resultType="Long" >
+    select 
+    count(*)
+    from exercises
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from exercises
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slhj.www.edu.pojo.Exercises" >
+    insert into exercises (id, question_id, question, 
+      selection_a, selection_b, selection_c, 
+      selection_d, correct_answer)
+    values (#{id,jdbcType=INTEGER}, #{questionId,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR}, 
+      #{selectionA,jdbcType=VARCHAR}, #{selectionB,jdbcType=VARCHAR}, #{selectionC,jdbcType=VARCHAR}, 
+      #{selectionD,jdbcType=VARCHAR}, #{correctAnswer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slhj.www.edu.pojo.Exercises" >
+    insert into exercises
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="questionId != null" >
+        question_id,
+      </if>
+      <if test="question != null" >
+        question,
+      </if>
+      <if test="selectionA != null" >
+        selection_a,
+      </if>
+      <if test="selectionB != null" >
+        selection_b,
+      </if>
+      <if test="selectionC != null" >
+        selection_c,
+      </if>
+      <if test="selectionD != null" >
+        selection_d,
+      </if>
+      <if test="correctAnswer != null" >
+        correct_answer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null" >
+        #{questionId,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionA != null" >
+        #{selectionA,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionB != null" >
+        #{selectionB,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionC != null" >
+        #{selectionC,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionD != null" >
+        #{selectionD,jdbcType=VARCHAR},
+      </if>
+      <if test="correctAnswer != null" >
+        #{correctAnswer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slhj.www.edu.pojo.Exercises" >
+    update exercises
+    <set >
+      <if test="questionId != null" >
+        question_id = #{questionId,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null" >
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionA != null" >
+        selection_a = #{selectionA,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionB != null" >
+        selection_b = #{selectionB,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionC != null" >
+        selection_c = #{selectionC,jdbcType=VARCHAR},
+      </if>
+      <if test="selectionD != null" >
+        selection_d = #{selectionD,jdbcType=VARCHAR},
+      </if>
+      <if test="correctAnswer != null" >
+        correct_answer = #{correctAnswer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slhj.www.edu.pojo.Exercises" >
+    update exercises
+    set question_id = #{questionId,jdbcType=VARCHAR},
+      question = #{question,jdbcType=VARCHAR},
+      selection_a = #{selectionA,jdbcType=VARCHAR},
+      selection_b = #{selectionB,jdbcType=VARCHAR},
+      selection_c = #{selectionC,jdbcType=VARCHAR},
+      selection_d = #{selectionD,jdbcType=VARCHAR},
+      correct_answer = #{correctAnswer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

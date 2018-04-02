@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slhj.www.edu.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.slhj.www.edu.pojo.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="art_type" jdbcType="VARCHAR" property="artType" />
+    <result column="art_time" jdbcType="TIMESTAMP" property="artTime" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="author_dept_id" jdbcType="VARCHAR" property="authorDeptId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.slhj.www.edu.pojo.Article">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, art_type, art_time, author, title, author_dept_id
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slhj.www.edu.pojo.Article">
+    insert into article (id, art_type, art_time, 
+      author, title, author_dept_id, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{artType,jdbcType=VARCHAR}, #{artTime,jdbcType=TIMESTAMP}, 
+      #{author,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{authorDeptId,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slhj.www.edu.pojo.Article">
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="artType != null">
+        art_type,
+      </if>
+      <if test="artTime != null">
+        art_time,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="authorDeptId != null">
+        author_dept_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="artType != null">
+        #{artType,jdbcType=VARCHAR},
+      </if>
+      <if test="artTime != null">
+        #{artTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="authorDeptId != null">
+        #{authorDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slhj.www.edu.pojo.Article">
+    update article
+    <set>
+      <if test="artType != null">
+        art_type = #{artType,jdbcType=VARCHAR},
+      </if>
+      <if test="artTime != null">
+        art_time = #{artTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="authorDeptId != null">
+        author_dept_id = #{authorDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.slhj.www.edu.pojo.Article">
+    update article
+    set art_type = #{artType,jdbcType=VARCHAR},
+      art_time = #{artTime,jdbcType=TIMESTAMP},
+      author = #{author,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      author_dept_id = #{authorDeptId,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slhj.www.edu.pojo.Article">
+    update article
+    set art_type = #{artType,jdbcType=VARCHAR},
+      art_time = #{artTime,jdbcType=TIMESTAMP},
+      author = #{author,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      author_dept_id = #{authorDeptId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+	
+	
+
+	<select id="selectByTitle" parameterType="String" resultMap="ResultMapWithBLOBs">
+		select 
+    	<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" /> from article where title 
+			= #{title,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByTypeAll" parameterType="com.slhj.www.edu.common.QueryBase" resultMap="ResultMapWithBLOBs">
+		select 
+    	<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" /> from article where art_type 
+			= #{parameters.artType,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateByTitleSelective" parameterType="com.slhj.www.edu.pojo.Article">
+		update article
+		<set>
+			<if test="artType != null">
+				art_type = #{artType,jdbcType=VARCHAR},
+			</if>
+			<if test="artTime != null">
+				art_time = #{artTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="author != null">
+				author = #{author,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGTEXT},
+			</if>
+			<if test="authorDeptId != null">
+				author_dept_id = #{authorDeptId,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+        		content = #{content,jdbcType=LONGVARCHAR},
+      		</if>
+		</set>
+		where title = #{title,jdbcType=VARCHAR}
+	</update>
+	
+	
+	
+	<!-- 根据查询条件获取查询获得的数据量 -->
+	<select id="size" parameterType="Map" resultType="Long">
+		select count(*) from article
+		<where>
+			<if test="artType != null and artType != ''">
+				AND art_type = #{artType,jdbcType=VARCHAR}
+			</if>
+			<if test="author != null and author != ''">
+				AND author like
+				CONCAT(CONCAT('%',
+				#{author,jdbcType=VARCHAR}),'%')
+			</if>
+			
+			
+			<if test="title != null">
+				AND title like
+				CONCAT(CONCAT('%',
+				#{title,jdbcType=VARCHAR}),'%')
+			</if>
+			
+			<if test="authorDeptId != null and authorDeptId != ''">
+				AND author_dept_id =
+				#{authorDeptId,jdbcType=VARCHAR}
+			</if>
+			
+		</where>
+	</select>
+	
+	<!-- 分页查询获取文章信息 -->
+	<select id="selectByPageAndSelections" parameterType="com.slhj.www.edu.common.QueryBase"
+		resultMap="ResultMapWithBLOBs">
+		select 
+    	<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" /> from article
+		<where>
+			<if test="parameters.artType != null and parameters.artType != ''">
+				AND art_type = #{parameters.artType,jdbcType=VARCHAR}
+				
+			</if>
+			<if test="parameters.author != null and parameters.author != ''">
+				AND author like
+				CONCAT(CONCAT('%',
+				#{parameters.author,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="parameters.title != null and parameters.title != ''">
+				AND title like
+				CONCAT(CONCAT('%',
+				#{parameters.title,jdbcType=VARCHAR}),'%')
+			</if>
+			<if test="parameters.authorDeptId != null and parameters.authorDeptId != ''">
+				AND author_dept_id =
+				#{parameters.authorDeptId,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by art_time
+		<if test="firstRow != null and pageSize != null">
+		limit #{firstRow},#{pageSize}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slhj.www.edu.dao.TestPaperMapper" >
+  <resultMap id="BaseResultMap" type="com.slhj.www.edu.pojo.TestPaper" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="paper_id" property="paperId" jdbcType="VARCHAR" />
+    <result column="question_id" property="questionId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, paper_id, question_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from test_paper
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectPaperIdByPage" resultType="string" parameterType="com.slhj.www.edu.common.QueryBase" >
+    select 
+    distinct paper_id
+    from test_paper
+    order by paper_id
+    <if test="firstRow != null and pageSize != null" >
+      limit #{firstRow},#{pageSize}
+    </if>
+  </select>
+  <!-- 查询一套试卷上有几道题  -->
+	<select id="size" parameterType="Map" resultType="Long">
+		select count(*) from test_paper
+		<where>
+			<if test="paperId != null and paperId != ''">
+				AND paper_id = #{paperId,jdbcType=VARCHAR}
+			</if>
+			
+		</where>
+	</select>
+  <select id="selectByPaperId" parameterType="com.slhj.www.edu.common.QueryBase" resultMap="BaseResultMap">
+		select * from test_paper
+		<where>
+			<if test="parameters.paperId != null and parameters.paperId != ''">
+				AND paper_id = #{parameters.paperId,jdbcType=VARCHAR}
+			</if>
+			
+		</where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from test_paper
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slhj.www.edu.pojo.TestPaper" >
+    insert into test_paper (id, paper_id, question_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{paperId,jdbcType=VARCHAR}, #{questionId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.slhj.www.edu.pojo.TestPaper" >
+    insert into test_paper
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="paperId != null" >
+        paper_id,
+      </if>
+      <if test="questionId != null" >
+        question_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="paperId != null" >
+        #{paperId,jdbcType=VARCHAR},
+      </if>
+      <if test="questionId != null" >
+        #{questionId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slhj.www.edu.pojo.TestPaper" >
+    update test_paper
+    <set >
+      <if test="paperId != null" >
+        paper_id = #{paperId,jdbcType=VARCHAR},
+      </if>
+      <if test="questionId != null" >
+        question_id = #{questionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slhj.www.edu.pojo.TestPaper" >
+    update test_paper
+    set paper_id = #{paperId,jdbcType=VARCHAR},
+      question_id = #{questionId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

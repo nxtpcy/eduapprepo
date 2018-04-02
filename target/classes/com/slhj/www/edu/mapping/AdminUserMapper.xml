@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slhj.www.edu.dao.AdminUserMapper" >
+  <resultMap id="BaseResultMap" type="com.slhj.www.edu.pojo.AdminUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="work_id" property="workId" jdbcType="VARCHAR" />
+    <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, work_id, manager_name, age, dept_id, password, telphone, email
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from manager
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slhj.www.edu.pojo.AdminUser" >
+    insert into manager (id, work_id, manager_name, 
+      age, dept_id, password, 
+      telphone, email)
+      values (#{id,jdbcType=INTEGER}, #{workId,jdbcType=VARCHAR}, #{managerName,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{deptId,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{telphone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slhj.www.edu.pojo.AdminUser" >
+    insert into manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="workId != null" >
+        work_id,
+      </if>
+      <if test="managerName != null" >
+        manager_name,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="telphone != null" >
+        telphone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="workId != null" >
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null" >
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slhj.www.edu.pojo.AdminUser" >
+    update manager
+    <set >
+      <if test="workId != null" >
+        work_id = #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null" >
+        manager_name = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        telphone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slhj.www.edu.pojo.AdminUser" >
+    update manager
+      set work_id = #{workId,jdbcType=VARCHAR},
+      manager_name = #{managerName,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      dept_id = #{deptId,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 用户登录查询 -->
+	<select id="selectByLogin" parameterType="com.slhj.www.edu.pojo.AdminUser"
+		resultMap="BaseResultMap">
+		select * from manager
+		where manager_name =
+		#{managerName,jdbcType=VARCHAR} AND password = #{password,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 修改密码 -->
+	<update id="updatePwdByManagerName" parameterType="com.slhj.www.edu.pojo.AdminUser">
+		update manager
+		set password = #{password,jdbcType=VARCHAR}
+		where manager_name =
+		#{managerName,jdbcType=VARCHAR}
+	</update>
+
+	<!--根据用户名查询用户是否存在 -->
+	<select id="selectByManagerName" parameterType="String" resultMap="BaseResultMap">
+		select * from manager
+		where manager_name =
+		#{managerName,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 根据用户名删除用户 -->
+	<delete id="deleteByManagerName" parameterType="String">
+		delete from
+		manager where manager_name = #{managerName,jdbcType=VARCHAR}
+	</delete>
+	
+</mapper>
