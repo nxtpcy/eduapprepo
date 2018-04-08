@@ -8,6 +8,8 @@ import com.slhj.www.edu.pojo.Exercises;
 
 public interface ExercisesMapper {
     int deleteByPrimaryKey(Integer id);
+    
+    int deleteByQuestionId(String questionId);
 
     int insert(Exercises record);
 

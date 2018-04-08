@@ -131,4 +131,31 @@ public class StudentServiceImpl implements StudentService {
 		return queryBase;
 	}
 
+	@Override
+	public StudentUserDTO getStuUserDTOByStuId(String studentId) {
+		// TODO Auto-generated method stub
+		StudentUserDTO studentUserDTO = this.studentUserMapper
+				.getStudentUserDTOByStuId(studentId);
+		return studentUserDTO;
+	}
+
+	@Override
+	public int updateStuUserbyDTO(StudentUserDTO studentUserDTO) {
+		// TODO Auto-generated method stub
+		int rows = this.studentUserMapper.updateByStuIdSelective(studentUserDTO);
+		return DAOResultUtil.getAddUpDateRemoveResult(rows, 0).getValue();
+	}
+
+	@Override
+	public int batchDeleteStudent(Integer[] ids) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < ids.length; i++) {
+			int id = ids[i];
+			if(!(DAOResultUtil.getAddUpDateRemoveResult(studentUserMapper.deleteByPrimaryKey(id), 0).getValue() == 1)) {
+				return StatusType.ERROR.getValue();
+			}
+		}
+		return StatusType.SUCCESS.getValue();
+	}
+
 }

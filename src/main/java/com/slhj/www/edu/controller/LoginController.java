@@ -53,10 +53,10 @@ public class LoginController {
 		//检查图片验证码
 		String kaptchaExpected = (String) request.getSession().getAttribute(
 				"KAPTCHA_SESSION_KEY");
-		if ((imageValue == null) || (!imageValue.equals(kaptchaExpected))) {
+		/*if ((imageValue == null) || (!imageValue.equals(kaptchaExpected))) {
 			return new Response(StatusType.KAPTCHA_ERROR.getValue(),
 					StatusType.KAPTCHA_ERROR.getMessage());
-		}
+		}*/
 
 		StatusType status = StatusType.ERROR;
 

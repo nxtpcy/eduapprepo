@@ -7,6 +7,7 @@ import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.pojo.StudentUser;
 import com.slhj.www.edu.pojo.dto.PasswordDTO;
 import com.slhj.www.edu.pojo.dto.RegisterDTO;
+import com.slhj.www.edu.pojo.dto.StudentUserDTO;
 
 
 
@@ -24,11 +25,17 @@ public interface StudentService {
 	public abstract int deleteStuUserByStuId(String stuId); // 根据学生学号删除用户
 
 	public abstract StudentUser getStuUserByStuId(String studentId); // 根据学生学号得到StudentUser对象
+	
+	public abstract StudentUserDTO getStuUserDTOByStuId(String studentId); // 根据学生学号得到StudentUser对象
 
 	public abstract int updatePassword(PasswordDTO passwordDTO); // 修改密码
 	
 	public abstract boolean checkRoleWhenLogin(String loginName, Byte role); //当登录时检查用户角色
 	
 	public abstract QueryBase query(Map<String, Object> paramMap);
+	
+	public abstract int updateStuUserbyDTO(StudentUserDTO studentUserDTO); // 更新学生用户
+	
+	public abstract	int batchDeleteStudent(Integer[] ids); // 批量删除学生信息
 	
 }

@@ -24,6 +24,13 @@
       limit #{firstRow},#{pageSize}
     </if>
   </select>
+  
+  <select id="selectDistinctPaperIdSize" resultType="Long" >
+    select 
+    count(distinct paper_id)
+    from test_paper
+  </select>
+  
   <!-- 查询一套试卷上有几道题  -->
 	<select id="size" parameterType="Map" resultType="Long">
 		select count(*) from test_paper

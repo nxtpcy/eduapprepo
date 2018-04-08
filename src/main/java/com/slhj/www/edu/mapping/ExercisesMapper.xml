@@ -49,6 +49,10 @@
     delete from exercises
     where id = #{id,jdbcType=INTEGER}
   </delete>
+   <delete id="deleteByQuestionId" parameterType="string" >
+    delete from exercises
+    where question_id = #{questionId,jdbcType=VARCHAR}
+  </delete>
   <insert id="insert" parameterType="com.slhj.www.edu.pojo.Exercises" >
     insert into exercises (id, question_id, question, 
       selection_a, selection_b, selection_c, 

@@ -28,4 +28,8 @@ public interface StudentUserMapper {
     Long queryRows(QueryBase paramQueryBase);
     
     StudentUser getStudentUserByStuId(String stuId);
+    
+    StudentUserDTO getStudentUserDTOByStuId(String stuId);
+    
+    int updateByStuIdSelective(StudentUserDTO record);
 }

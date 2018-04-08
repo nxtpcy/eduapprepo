@@ -42,7 +42,8 @@ public enum StatusType {
 	BEYOND_MAX_NUM(-35, "申请数量已达上限"),
 	REPEAT_APPLICATION(-36, "已经是助管，不可再申请岗位"), 
 	SURVEY_ANSWER_ERROR(-37,"无法提交问卷答案，请确认是否有权限或已做问卷"), 
-	THIRD_REVIEW(-38, "无法进行审核,请确认前两次审核是否已通过");
+	EXAM_TIMEOUT(-38,"答题时间过长，已超时"),
+	THIRD_REVIEW(-39, "无法进行审核,请确认前两次审核是否已通过");
 
 	private int value;    // 值
 	private String message;   // 值对应的描述

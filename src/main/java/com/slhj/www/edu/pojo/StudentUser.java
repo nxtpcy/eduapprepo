@@ -17,7 +17,6 @@ public class StudentUser implements Serializable {
 	private String stuName; // 学生姓名
 	private Integer age; // 学生年龄
 	private String instId; // 学生所在部门编号
-	private Integer score;
 
 	@Override
 	public String toString() {
@@ -72,11 +71,5 @@ public class StudentUser implements Serializable {
 		this.password = password == null ? null : password.trim();
 	}
 
-	public Integer getScore() {
-		return score;
-	}
-
-	public void setScore(Integer score) {
-		this.score = score;
-	}
+	
 }

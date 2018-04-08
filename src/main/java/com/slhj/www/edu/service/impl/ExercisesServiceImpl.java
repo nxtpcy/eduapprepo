@@ -71,8 +71,8 @@ public class ExercisesServiceImpl implements ExercisesService {
 	// 更新题目信息
 	@Override
 	public int update(Exercises exercises) {
-		if (exercises == null || exercises.getId() == null
-				|| exercisesMapper.selectByPrimaryKey(exercises.getId()) == null) {
+		if (exercises == null || exercises.getQuestionId() == null
+				|| exercisesMapper.selectByQuestionId(exercises.getQuestionId()) == null) {
 			return StatusType.NOT_EXISTS.getValue();
 		}
 
@@ -84,11 +84,11 @@ public class ExercisesServiceImpl implements ExercisesService {
 	// 删除题目
 	@Override
 	public int delete(Exercises exercises) {
-		if (exercises == null || exercises.getId() == null
-				|| exercisesMapper.selectByPrimaryKey(exercises.getId()) == null) {
+		if (exercises == null || exercises.getQuestionId() == null
+				|| exercisesMapper.selectByQuestionId(exercises.getQuestionId()) == null) {
 			return StatusType.NOT_EXISTS.getValue();
 		}
-		int rows = exercisesMapper.deleteByPrimaryKey(exercises.getId());
+		int rows = exercisesMapper.deleteByQuestionId(exercises.getQuestionId());
 
 		return DAOResultUtil.getAddUpDateRemoveResult(rows, 0).getValue();
 	}
@@ -120,7 +120,7 @@ public class ExercisesServiceImpl implements ExercisesService {
 	@Override
 	public void selectPaperIdsByPage(QueryBase queryBase) {
 		List<String> paperIds = testPaperMapper.selectPaperIdByPage(queryBase);
-		queryBase.setTotalRow((long)paperIds.size());// 设置paperId的总个数 
+		queryBase.setTotalRow(testPaperMapper.selectDistinctPaperIdSize());// 设置paperId的总个数 
 		
 		queryBase.setResults(paperIds);// 获取需要返回的数据集
 	}
@@ -136,10 +136,13 @@ public class ExercisesServiceImpl implements ExercisesService {
 	//学生提交考卷时调用。（因为同时操作两张表，所以要加上事务管理 ）
 	//插入错题，同时计算试卷分数，在score表中插入一行成绩，插入前要根据学号和试卷号判断分数是否存在，若存在，直接更新即可。
 	@Override
-	public int judgeAndUpdateScore(final List<ExercisesDTO> stuAnswers, final Session session) {
+	public int judgeAndUpdateScore(List<ExercisesDTO> stuAnswers, Session session) {
 		if (stuAnswers == null) {
 			return StatusType.OBJECT_NULL.getValue();
 		}
+		
+		final List<ExercisesDTO> stuAnswersList = stuAnswers;
+		final Session sessionRef = session;
 		
 		int statusCode = -1;
 		try {
@@ -147,14 +150,13 @@ public class ExercisesServiceImpl implements ExercisesService {
 				@Override
 				public Integer doInTransaction(TransactionStatus status) {
 					int mistakeNumber = 0; // 错误题目数
-					StudentUser studentUser = (StudentUser) session.getAttribute("currentUser");
+					StudentUser studentUser = (StudentUser) sessionRef.getAttribute("currentUser");
 					String stuId = studentUser.getStuId();
-					String paperId = (String)session.getAttribute("paperId");
+					String paperId = (String)sessionRef.getAttribute("paperId");
 					int correctNumber = 0;
-					for (int i = 0; i < stuAnswers.size(); i++) {
-						ExercisesDTO exercisesDTO = stuAnswers.get(i);
+					for (ExercisesDTO exercisesDTO : stuAnswersList) {
 						//从session中取出该题的正确答案
-						String correctAnswer = (String)session.getAttribute(exercisesDTO.getQuestionId());
+						String correctAnswer = (String)sessionRef.getAttribute(exercisesDTO.getQuestionId());
 						//学生答案
 						String stuAns = exercisesDTO.getStuAnswer();
 						//如果学生答案正确则答对题数加1

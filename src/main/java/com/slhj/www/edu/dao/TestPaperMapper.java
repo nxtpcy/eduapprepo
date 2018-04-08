@@ -25,4 +25,7 @@ public interface TestPaperMapper {
     
     List<TestPaper> selectByPaperId(QueryBase queryBase);
     
+    Long selectDistinctPaperIdSize();
+    
+    
 }

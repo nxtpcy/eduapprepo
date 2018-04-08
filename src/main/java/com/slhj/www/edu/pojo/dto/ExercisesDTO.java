@@ -1,9 +1,17 @@
 package com.slhj.www.edu.pojo.dto;
 
-import com.slhj.www.edu.pojo.Exercises;
+import java.io.Serializable;
 
-public class ExercisesDTO extends Exercises{
 
+public class ExercisesDTO implements Serializable{
+
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3784662070729620039L;
+	
 	private String questionId;
 	private String stuAnswer;
 	
@@ -20,6 +28,12 @@ public class ExercisesDTO extends Exercises{
 	public void setStuAnswer(String stuAnswer) {
 		this.stuAnswer = stuAnswer;
 	}
-	
-	
+	public ExercisesDTO(String questionId, String stuAnswer) {
+		this.questionId = questionId;
+		this.stuAnswer = stuAnswer;
+	}
+	public ExercisesDTO() {
+		
+	}
+		
 }

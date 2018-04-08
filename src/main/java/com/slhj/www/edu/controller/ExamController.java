@@ -70,7 +70,7 @@ public class ExamController {
 		try {
 			Subject currentUser = SecurityUtils.getSubject();
 			if (currentUser != null) {
-				Session session = currentUser.getSession();
+				Session session = currentUser.getSession(false);
 				if (session != null) {
 					QueryBase queryBase = new QueryBase();
 					queryBase.addParameter("paperId", map.get("paperId"));
@@ -98,19 +98,31 @@ public class ExamController {
 	@RequestMapping(value = "/submitPaper", method = RequestMethod.POST)
 	@ResponseBody
 	public Object submitPaper(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody List<ExercisesDTO> stuAnswers, Session session) {
-		
-		
+			HttpServletResponse response, @RequestBody Map<String, Object> map) {
+		int status = StatusType.EXAM_TIMEOUT.getValue();
+		String message = StatusType.EXAM_TIMEOUT.getMessage();
 		
 		try {
-			int status = exercisesService.judgeAndUpdateScore(stuAnswers, session);
-			String message = StatusType.value(status).getMessage();
+			Subject currentUser = SecurityUtils.getSubject();
+			if (currentUser != null) {
+				Session session = currentUser.getSession(false);
+				if (session != null) {
+					List<ExercisesDTO> stuAnswers = (List<ExercisesDTO>) map.get("stuAnswerList");
+					status = exercisesService.judgeAndUpdateScore(stuAnswers, session);
+					message = StatusType.value(status).getMessage();
+				} 
+				return new Response(status, message);
+				
+			}
+			
+			status = StatusType.UNAUTHORIZED.getValue();
+			message = StatusType.UNAUTHORIZED.getMessage(); 
 			return new Response(status, message);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error(
-					"调用ExamController.submitPaper出错,list={},error={}",
-					new Object[] { stuAnswers, e });
+					"调用ExamController.submitPaper出错,map={},error={}",
+					new Object[] { map, e });
 			return new Response(StatusType.EXCEPTION.getValue(),
 					StatusType.EXCEPTION.getMessage());
 		}
