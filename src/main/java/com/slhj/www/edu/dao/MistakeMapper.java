@@ -24,4 +24,7 @@ public interface MistakeMapper {
     List<Mistake> selectByStuIdOrPaperIdByPage(QueryBase queryBase);
     
     List<Mistake> selectAllByPage(QueryBase queryBase);
+    
+    Mistake selectOneExist(QueryBase queryBase);
+    
 }

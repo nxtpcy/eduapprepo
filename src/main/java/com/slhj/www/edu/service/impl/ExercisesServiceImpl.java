@@ -32,8 +32,7 @@ import com.slhj.www.edu.pojo.TestPaper;
 import com.slhj.www.edu.pojo.dto.ExercisesDTO;
 import com.slhj.www.edu.service.ExercisesService;
 import com.slhj.www.edu.utils.DAOResultUtil;
-
-
+import com.alibaba.fastjson.JSON;
 import com.slhj.www.edu.common.*;
 
 @Service("exercisesService")
@@ -165,12 +164,27 @@ public class ExercisesServiceImpl implements ExercisesService {
 						} else {
 							
 							//学生答案不正确，不加分，但要插入错题
-							Mistake mistake = new Mistake();
-							mistake.setPaperId(paperId);
-							mistake.setQuestionId(exercisesDTO.getQuestionId());
-							mistake.setStuId(stuId);
-							//插入一道错题
-							mistakeNumber += mistakeMapper.insertSelective(mistake);
+							//判断之前是否已有过该学生该套试卷相同题目的错题记录，若有，则可以不用再次插入
+							QueryBase queryBase = new QueryBase();
+							queryBase.addParameter("stuId", stuId);
+							queryBase.addParameter("paperId", paperId);
+							queryBase.addParameter("questionId", exercisesDTO.getQuestionId());
+							
+							Mistake mistake = mistakeMapper.selectOneExist(queryBase);
+							if (mistake == null) {
+								//不存在相同错题的记录，因此要插入
+								mistake = new Mistake();
+								mistake.setPaperId(paperId);
+								mistake.setQuestionId(exercisesDTO.getQuestionId());
+								mistake.setStuId(stuId);
+								
+								//插入一道错题
+								mistakeNumber += mistakeMapper.insertSelective(mistake);
+							} else {
+								//已存在相同记录，则无须再插入一次了 
+								mistakeNumber++;
+							}
+							
 						} 
 					}
 					//计算分数

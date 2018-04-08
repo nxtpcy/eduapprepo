@@ -21,7 +21,6 @@ public class MistakeDTO extends Exercises {
     
     
 	public MistakeDTO(String stuId, String paperId, String questionId, Exercises exercises) {
-		super();
 		this.stuId = stuId;
 		this.paperId = paperId;
 		this.questionId = questionId;

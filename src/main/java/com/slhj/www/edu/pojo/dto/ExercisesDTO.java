@@ -35,5 +35,11 @@ public class ExercisesDTO implements Serializable{
 	public ExercisesDTO() {
 		
 	}
+	@Override
+	public String toString() {
+		return "ExercisesDTO [questionId=" + questionId + ", stuAnswer=" + stuAnswer + "]";
+	}
+	
+	
 		
 }

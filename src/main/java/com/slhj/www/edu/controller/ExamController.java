@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.common.Response;
 import com.slhj.www.edu.common.StatusType;
@@ -95,10 +98,19 @@ public class ExamController {
 	}
 	
 	//提交试卷并更新分数，插入错题
+	/*前端传入json串，通过@RequestBody注解注入controller的入参stuAnswers
+	[
+		{"questionId": "008", "stuAnswer": "a"},
+		{"questionId": "009", "stuAnswer": "c"},
+		{"questionId": "010", "stuAnswer": "b"},
+		{"questionId": "011", "stuAnswer": "a"},
+		{"questionId": "012", "stuAnswer": "c"}
+	]
+	*/
 	@RequestMapping(value = "/submitPaper", method = RequestMethod.POST)
 	@ResponseBody
 	public Object submitPaper(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody Map<String, Object> map) {
+			HttpServletResponse response, @RequestBody String stuAnswers) {
 		int status = StatusType.EXAM_TIMEOUT.getValue();
 		String message = StatusType.EXAM_TIMEOUT.getMessage();
 		
@@ -107,8 +119,9 @@ public class ExamController {
 			if (currentUser != null) {
 				Session session = currentUser.getSession(false);
 				if (session != null) {
-					List<ExercisesDTO> stuAnswers = (List<ExercisesDTO>) map.get("stuAnswerList");
-					status = exercisesService.judgeAndUpdateScore(stuAnswers, session);
+					
+					List<ExercisesDTO> stuAnswersList = JSON.parseObject(stuAnswers, new TypeReference<List<ExercisesDTO>>(){});
+					status = exercisesService.judgeAndUpdateScore(stuAnswersList, session);
 					message = StatusType.value(status).getMessage();
 				} 
 				return new Response(status, message);
@@ -121,8 +134,8 @@ public class ExamController {
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error(
-					"调用ExamController.submitPaper出错,map={},error={}",
-					new Object[] { map, e });
+					"调用ExamController.submitPaper出错,string={},error={}",
+					new Object[] { stuAnswers, e });
 			return new Response(StatusType.EXCEPTION.getValue(),
 					StatusType.EXCEPTION.getMessage());
 		}

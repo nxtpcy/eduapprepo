@@ -30,7 +30,7 @@
 			</if>
 		</where>
   </select>
-  
+   
   <select id="selectAllByPage" resultMap="BaseResultMap" parameterType="com.slhj.www.edu.common.QueryBase" >
     select 
     <include refid="Base_Column_List" />
@@ -40,7 +40,22 @@
       limit #{firstRow},#{pageSize}
     </if>
   </select>
-  
+  <select id="selectOneExist" resultMap="BaseResultMap" parameterType="com.slhj.www.edu.common.QueryBase" >
+    select 
+    <include refid="Base_Column_List" />
+    from mistake 
+	<where>
+		<if test="parameters.stuId != null and parameters.stuId != ''">
+			AND stu_id = #{parameters.stuId,jdbcType=VARCHAR}
+		</if>
+		<if test="parameters.paperId != null and parameters.paperId != ''">
+			AND paper_id = #{parameters.paperId,jdbcType=VARCHAR}
+		</if>
+		<if test="parameters.questionId != null and parameters.questionId != ''">
+			AND question_id = #{parameters.questionId,jdbcType=VARCHAR}
+		</if>
+	</where>
+  </select>
   <select id="selectByStuIdOrPaperIdByPage" resultMap="BaseResultMap" parameterType="com.slhj.www.edu.common.QueryBase" >
     select 
     <include refid="Base_Column_List" />
