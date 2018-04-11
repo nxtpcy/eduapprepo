@@ -141,10 +141,36 @@ public class ArticleController {
 					StatusType.EXCEPTION.getMessage());
 		}
 	}
-
 	
-
-
+	// 按类型和标题（模糊查询）查询文章
+	@RequestMapping(value = "selectByTypeAndTitle", method = RequestMethod.POST)
+	@ResponseBody
+	public Object selectByTypeAndTitle(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody Map map) {
+		try {
+			QueryBase querybase = new QueryBase();
+			
+			
+			
+			querybase.addParameter("artType", map.get("artType"));
+			querybase.addParameter("title", map.get("title"));
+			querybase.setPageSize(Long.parseLong(map.get("rows").toString()));
+			querybase
+					.setCurrentPage(Long.parseLong(map.get("page").toString()));
+			
+			articleService.selectByTypeAndTitle(querybase);
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			result.put("total", querybase.getTotalRow());
+			result.put("result", querybase.getResults());
+			return result;
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("调用ArticleController.selectByTypeAndTitle出错,map={},error={}",
+					new Object[] { map, e });
+			return new Response(StatusType.EXCEPTION.getValue(),
+					StatusType.EXCEPTION.getMessage());
+		}
+	}
 	
 
 }

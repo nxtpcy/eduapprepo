@@ -22,8 +22,11 @@ import com.alibaba.fastjson.TypeReference;
 import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.common.Response;
 import com.slhj.www.edu.common.StatusType;
+import com.slhj.www.edu.pojo.Score;
+import com.slhj.www.edu.pojo.StudentUser;
 import com.slhj.www.edu.pojo.dto.ExercisesDTO;
 import com.slhj.www.edu.service.ExercisesService;
+import com.slhj.www.edu.service.ScoreService;
 
 @Controller
 @RequestMapping(value = "/exam")
@@ -33,6 +36,9 @@ public class ExamController {
 	
 	@Autowired
 	private ExercisesService exercisesService;
+	
+	@Autowired
+	private ScoreService scoreService;
 
 	/**
 	 * 查询所有试卷列表(分页)
@@ -112,7 +118,7 @@ public class ExamController {
 	public Object submitPaper(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String stuAnswers) {
 		int status = StatusType.EXAM_TIMEOUT.getValue();
-		String message = StatusType.EXAM_TIMEOUT.getMessage();
+		int score = 0;
 		
 		try {
 			Subject currentUser = SecurityUtils.getSubject();
@@ -122,15 +128,24 @@ public class ExamController {
 					
 					List<ExercisesDTO> stuAnswersList = JSON.parseObject(stuAnswers, new TypeReference<List<ExercisesDTO>>(){});
 					status = exercisesService.judgeAndUpdateScore(stuAnswersList, session);
-					message = StatusType.value(status).getMessage();
-				} 
-				return new Response(status, message);
+					if (status == 1) {
+						StudentUser studentUser = (StudentUser) session.getAttribute("currentUser");
+						String stuId = studentUser.getStuId();
+						String paperId = (String)session.getAttribute("paperId");
+						QueryBase queryBase = new QueryBase();
+						queryBase.addParameter("stuId", stuId);
+						queryBase.addParameter("paperId", paperId);
+						scoreService.selectByStuIdOrPaperIdByPage(queryBase);
+						return new Response(status, queryBase.getResults());
+					}
+				}
+				
+				return new Response(status, score);
 				
 			}
 			
 			status = StatusType.UNAUTHORIZED.getValue();
-			message = StatusType.UNAUTHORIZED.getMessage(); 
-			return new Response(status, message);
+			return new Response(status, null);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error(

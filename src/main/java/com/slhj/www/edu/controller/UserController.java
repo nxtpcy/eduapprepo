@@ -21,6 +21,7 @@ import com.slhj.www.edu.annotation.SysControllerLogAnnotation;
 import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.common.Response;
 import com.slhj.www.edu.common.StatusType;
+import com.slhj.www.edu.pojo.dto.StudentInfoDTO;
 import com.slhj.www.edu.pojo.dto.StudentUserDTO;
 import com.slhj.www.edu.service.StudentService;
 
@@ -64,6 +65,22 @@ public class UserController {
 			return studentUserDTO;
 		} catch (Exception e) {
 			logger.error("调用userController.simpleUser出错,para={}", stuId, e);
+			return new Response(StatusType.EXCEPTION.getValue(),
+					StatusType.EXCEPTION.getMessage());
+		}
+	}
+	
+	@SysControllerLogAnnotation(desc = "通过学号获得学生基本信息，如姓名学院等")
+	@RequestMapping(value = "getStuInfoByStuId", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getStuInfoByStuId(HttpServletRequest request,
+			@RequestParam String stuId) {
+		try {
+			StudentInfoDTO studentInfoDTO = studentService
+					.getStuInfoByStuId(stuId);
+			return studentInfoDTO;
+		} catch (Exception e) {
+			logger.error("调用userController.getStuInfoByStuId出错,para={}", stuId, e);
 			return new Response(StatusType.EXCEPTION.getValue(),
 					StatusType.EXCEPTION.getMessage());
 		}

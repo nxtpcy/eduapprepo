@@ -9,6 +9,13 @@
 		<result column="inst_id" property="instId" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
 	</resultMap>
+	<resultMap id="StuInfoResultMap" type="com.slhj.www.edu.pojo.dto.StudentInfoDTO">
+		<id column="stu_id" property="stuId" jdbcType="VARCHAR" />
+		<result column="stu_name" property="stuName" jdbcType="VARCHAR" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="inst_id" property="instId" jdbcType="VARCHAR" />
+		<result column="inst_name" property="instName" jdbcType="VARCHAR" />
+	</resultMap>
 
 	<resultMap id="RegisterDTO" extends="BaseResultMap"
 		type="com.slhj.www.edu.pojo.dto.RegisterDTO">
@@ -49,6 +56,12 @@
 		<if test="firstRow != null and pageSize != null">
 			limit #{firstRow},#{pageSize}
 		</if>
+	</select>
+	
+	<select id="getStuInfoByStuId" parameterType="string"
+		resultMap="StuInfoResultMap">
+		select student.age, student.inst_id, student.stu_id, student.stu_name, institute.inst_name from institute, student
+		where student.stu_id = #{stuId,jdbcType=VARCHAR} and student.inst_id = institute.inst_id
 	</select>
 
 	<select id="queryRows" parameterType="com.slhj.www.edu.common.QueryBase"

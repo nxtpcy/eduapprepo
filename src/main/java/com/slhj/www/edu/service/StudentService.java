@@ -7,6 +7,7 @@ import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.pojo.StudentUser;
 import com.slhj.www.edu.pojo.dto.PasswordDTO;
 import com.slhj.www.edu.pojo.dto.RegisterDTO;
+import com.slhj.www.edu.pojo.dto.StudentInfoDTO;
 import com.slhj.www.edu.pojo.dto.StudentUserDTO;
 
 
@@ -37,5 +38,7 @@ public interface StudentService {
 	public abstract int updateStuUserbyDTO(StudentUserDTO studentUserDTO); // 更新学生用户
 	
 	public abstract	int batchDeleteStudent(Integer[] ids); // 批量删除学生信息
+	
+	public abstract StudentInfoDTO getStuInfoByStuId(String stuId);   // 根据学号查询学生基本信息（姓名学院等）
 	
 }

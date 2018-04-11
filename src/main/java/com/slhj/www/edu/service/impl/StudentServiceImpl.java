@@ -14,6 +14,7 @@ import com.slhj.www.edu.dao.StudentUserMapper;
 import com.slhj.www.edu.pojo.StudentUser;
 import com.slhj.www.edu.pojo.dto.PasswordDTO;
 import com.slhj.www.edu.pojo.dto.RegisterDTO;
+import com.slhj.www.edu.pojo.dto.StudentInfoDTO;
 import com.slhj.www.edu.pojo.dto.StudentUserDTO;
 import com.slhj.www.edu.service.StudentService;
 import com.slhj.www.edu.utils.DAOResultUtil;
@@ -86,6 +87,16 @@ public class StudentServiceImpl implements StudentService {
 		StudentUser studentUser = this.studentUserMapper
 				.getStudentUserByStuId(studentId);
 		return studentUser;
+	}
+	
+	/**
+	 * 根据学号得到学生基本信息
+	 */
+	public StudentInfoDTO getStuInfoByStuId(String stuId) {
+		
+		StudentInfoDTO studentInfoDTO = this.studentUserMapper
+				.getStuInfoByStuId(stuId);
+		return studentInfoDTO;
 	}
 
 	/**

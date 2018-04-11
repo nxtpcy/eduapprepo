@@ -5,6 +5,7 @@ import java.util.List;
 import com.slhj.www.edu.common.QueryBase;
 import com.slhj.www.edu.pojo.StudentUser;
 import com.slhj.www.edu.pojo.dto.RegisterDTO;
+import com.slhj.www.edu.pojo.dto.StudentInfoDTO;
 import com.slhj.www.edu.pojo.dto.StudentUserDTO;
 
 public interface StudentUserMapper {
@@ -32,4 +33,6 @@ public interface StudentUserMapper {
     StudentUserDTO getStudentUserDTOByStuId(String stuId);
     
     int updateByStuIdSelective(StudentUserDTO record);
+    
+    StudentInfoDTO getStuInfoByStuId(String stuId);
 }

@@ -26,5 +26,8 @@ public interface ArticleService {
 	
 	// 查询文章(按类型查询前几条)
 	void selectByTypeFirst6(QueryBase queryBase);
+	
+	// 按类型和标题（模糊查询）查询文章
+	public void selectByTypeAndTitle(QueryBase queryBase);
 
 }

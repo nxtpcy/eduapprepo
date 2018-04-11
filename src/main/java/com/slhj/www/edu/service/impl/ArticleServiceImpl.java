@@ -73,6 +73,16 @@ public class ArticleServiceImpl implements ArticleService {
 				.selectByPageAndSelections(queryBase);
 		queryBase.setResults(articles);// 获取需要返回的数据集
 	}
+	
+	// 按类型和标题（模糊查询）查询文章
+	@Override
+	public void selectByTypeAndTitle(QueryBase queryBase) {
+		queryBase.setTotalRow(articleMapper.size(queryBase
+				.getParameters()));// 获取查询到的文章总数
+		List<Article> articles = articleMapper
+				.selectByPageAndSelections(queryBase);
+		queryBase.setResults(articles);// 获取需要返回的数据集
+	}
 
 	/**
 	 * 批量增加文章
